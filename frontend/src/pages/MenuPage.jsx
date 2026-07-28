@@ -38,7 +38,15 @@ export default function MenuPage() {
 
   useEffect(() => {
     axios.get('/api/menu')
-      .then(res => { setMenus(res.data); setLoading(false); })
+      .then(res => { 
+        if (Array.isArray(res.data)) {
+          setMenus(res.data); 
+        } else {
+          console.error('API did not return an array:', res.data);
+          toast.error('Gagal memuat menu: Server error');
+        }
+        setLoading(false); 
+      })
       .catch(() => { toast.error('Gagal memuat menu'); setLoading(false); });
   }, []);
 
