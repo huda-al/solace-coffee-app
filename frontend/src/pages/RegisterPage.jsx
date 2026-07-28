@@ -85,11 +85,11 @@ const styles = {
   },
   form: { display: 'flex', flexDirection: 'column' },
   switchLink: { color: 'var(--dark-red)', fontWeight: 600, textDecoration: 'none', textAlign: 'center', fontSize: 14 },
-  rightPanel: { 
-    flex: 1, 
+  rightPanel: {
+    flex: 1,
     backgroundImage: `url(${backgroundImg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    position: 'relative' 
+    position: 'relative'
   },
 };
