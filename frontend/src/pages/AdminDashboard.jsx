@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X, Phone, MessageCircle, Download } from 'lucide-react';
+import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X, Phone, MessageCircle, Download, Check } from 'lucide-react';
 import dashboardLogo from '../assets/dashboard.png';
 const STATUS_OPTIONS = [
   { val: 'Menunggu Konfirmasi', label: 'Pending' },
@@ -60,6 +60,28 @@ function Sidebar({ active }) {
 function ProdukManager() {
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [localStok, setLocalStok] = useState({});
+
+  const handleStokChange = (id, val) => {
+    setLocalStok(prev => ({ ...prev, [id]: val }));
+  };
+
+  const handleStokSave = async (id) => {
+    const val = localStok[id];
+    if (val === undefined) return;
+    try {
+      await axios.put(`/api/menu/${id}`, { stok: val });
+      toast.success('Stok berhasil diupdate');
+      loadMenus();
+      setLocalStok(prev => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
+    } catch {
+      toast.error('Gagal update stok');
+    }
+  };
 
   const loadMenus = async () => {
     try {
@@ -168,22 +190,27 @@ function ProdukManager() {
                   <td style={s.td}>Rp {m.harga.toLocaleString('id-ID')}</td>
                   <td style={s.td}>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                      <button onClick={() => updateStok(m._id, Math.max(0, m.stok - 1))} style={s.qtyBtn}>-</button>
+                      <button onClick={() => handleStokChange(m._id, Math.max(0, (localStok[m._id] !== undefined ? localStok[m._id] : m.stok) - 1))} style={s.qtyBtn}>-</button>
                       <input
                         type="number"
                         min="0"
-                        key={m.stok}
-                        defaultValue={m.stok}
-                        onBlur={(e) => {
+                        value={localStok[m._id] !== undefined ? localStok[m._id] : m.stok}
+                        onChange={(e) => {
                           const val = parseInt(e.target.value, 10);
-                          if (!isNaN(val) && val >= 0 && val !== m.stok) updateStok(m._id, val);
+                          if (!isNaN(val) && val >= 0) handleStokChange(m._id, val);
                         }}
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter') e.target.blur();
+                          if (e.key === 'Enter') handleStokSave(m._id);
                         }}
                         style={{ fontWeight: 'bold', width: 44, textAlign: 'center', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 0', outline: 'none' }}
                       />
-                      <button onClick={() => updateStok(m._id, m.stok + 1)} style={s.qtyBtn}>+</button>
+                      <button onClick={() => handleStokChange(m._id, (localStok[m._id] !== undefined ? localStok[m._id] : m.stok) + 1)} style={s.qtyBtn}>+</button>
+                      
+                      {localStok[m._id] !== undefined && localStok[m._id] !== m.stok && (
+                        <button onClick={() => handleStokSave(m._id)} style={{ background: '#E8F9F0', border: '1px solid #25D366', color: '#128C7E', borderRadius: 6, padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} title="Simpan Stok">
+                          <Check size={16} />
+                        </button>
+                      )}
                     </div>
                   </td>
                   <td style={s.td}>
