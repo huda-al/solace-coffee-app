@@ -341,25 +341,27 @@ function OrderManager({ orders, updateStatus, loadData }) {
                 <td style={s.td}>
                   <div style={{ fontWeight: 600 }}>{order.id_pelanggan?.nama || '-'}</div>
                   {order.id_pelanggan?.nomor_telepon && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, marginBottom: 4 }}>
-                      <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>{order.id_pelanggan.nomor_telepon}</span>
-                      <a href={`tel:${order.id_pelanggan.nomor_telepon}`} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--dark-red)', display: 'flex', alignItems: 'center' }} title="Telepon">
-                        <Phone size={14} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6, marginBottom: 8, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600, width: '100%' }}>{order.id_pelanggan.nomor_telepon}</span>
+                      <a href={`tel:${order.id_pelanggan.nomor_telepon}`} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Telepon">
+                        <Phone size={14} /> Call
                       </a>
-                      <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#25D366', display: 'flex', alignItems: 'center' }} title="WhatsApp">
-                        <MessageCircle size={15} />
+                      <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 6, padding: '6px 12px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="WhatsApp">
+                        <MessageCircle size={14} /> WA
                       </a>
                     </div>
                   )}
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginTop: 2 }}>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', maxWidth: 220, lineHeight: 1.4, wordBreak: 'break-word' }}>{order.alamat_pengiriman}</div>
-                    <div style={{ display: 'flex', gap: 6, paddingTop: 2 }}>
-                      <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--dark-red)', padding: 0, display: 'flex' }} title="Copy Alamat">
-                        <Copy size={14} />
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8, marginTop: 4 }}>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, wordBreak: 'break-word', width: '100%' }}>
+                      {order.alamat_pengiriman}
+                    </div>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: '#f5f5f5', border: '1px solid #ccc', borderRadius: 6, cursor: 'pointer', color: 'var(--text-dark)', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }} title="Copy Alamat">
+                        <Copy size={14} /> Salin
                       </button>
                       {order.titik_lokasi && order.titik_lokasi.lat && (
-                        <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#1a73e8', padding: 0, display: 'flex' }} title="Buka di Maps">
-                          <MapPin size={14} />
+                        <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: '#e3f2fd', border: '1px solid #1a73e8', borderRadius: 6, cursor: 'pointer', color: '#1a73e8', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Buka di Maps">
+                          <MapPin size={14} /> Maps
                         </a>
                       )}
                     </div>
@@ -624,12 +626,12 @@ export default function AdminDashboard() {
                         <div>
                           <div style={s.incomingName}>{order.id_pelanggan?.nama || 'Pelanggan'}</div>
                           {order.id_pelanggan?.nomor_telepon && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6 }}>
-                              <a href={`tel:${order.id_pelanggan.nomor_telepon}`} onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 4, padding: '2px 6px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 4, textDecoration: 'none', fontSize: 10, fontWeight: 600 }}>
-                                <Phone size={10} /> Call
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
+                              <a href={`tel:${order.id_pelanggan.nomor_telepon}`} onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '8px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
+                                <Phone size={14} /> Call
                               </a>
-                              <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 4, padding: '2px 6px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 4, textDecoration: 'none', fontSize: 10, fontWeight: 600 }}>
-                                <MessageCircle size={10} /> WA
+                              <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 6, padding: '8px 12px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
+                                <MessageCircle size={14} /> WhatsApp
                               </a>
                             </div>
                           )}
