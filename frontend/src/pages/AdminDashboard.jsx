@@ -321,7 +321,7 @@ function OrderManager({ orders, updateStatus, loadData }) {
         `"${items}"`,
         o.total_harga,
         o.metode_pembayaran || '-',
-        o.status
+        o.status_pesanan || '-'
       ];
     });
     const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
