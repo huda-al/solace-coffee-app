@@ -15,7 +15,7 @@ const upload = multer({ storage });
 // GET /api/menu — semua menu (public)
 router.get('/', async (req, res) => {
   try {
-    const menus = await Menu.find({ tersedia: true }).sort({ kategori: 1 });
+    const menus = await Menu.find({ tersedia: true }).sort({ kategori: 1, nama_menu: 1 });
     res.json(menus);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 // GET /api/menu/all — semua menu termasuk tidak tersedia (admin)
 router.get('/all', protect, adminOnly, async (req, res) => {
   try {
-    const menus = await Menu.find().sort({ kategori: 1 });
+    const menus = await Menu.find().sort({ kategori: 1, nama_menu: 1 });
     res.json(menus);
   } catch (err) {
     res.status(500).json({ message: err.message });

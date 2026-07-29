@@ -9,7 +9,7 @@ const menuData = [
   // Classic
   { nama_menu: 'Americano', deskripsi: 'Kopi hitam klasik tanpa susu', harga: 18000, kategori: 'Classic', stok: 50, gambar: '' },
   { nama_menu: 'Latte', deskripsi: 'Kopi dengan susu lembut', harga: 20000, kategori: 'Classic', stok: 50, gambar: '' },
-  
+
   // Coffee Base
   { nama_menu: 'Sanger', deskripsi: 'Kopi espresso dengan susu kental manis khas Aceh', harga: 20000, kategori: 'Coffee Base', stok: 50, gambar: '' },
   { nama_menu: 'Barrel Brew', deskripsi: 'Cold brew unik dengan aroma khas', harga: 28000, kategori: 'Coffee Base', stok: 50, gambar: '' },
