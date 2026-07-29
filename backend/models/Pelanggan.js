@@ -5,7 +5,7 @@ const pelangganSchema = new mongoose.Schema({
   nama: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true, minlength: 6 },
-  nomor_telepon: { type: String, trim: true },
+  nomor_telepon: { type: String, required: true, trim: true },
   alamat_pengiriman: { type: String, trim: true },
   role: { type: String, enum: ['pelanggan', 'admin'], default: 'pelanggan' }
 }, { timestamps: true });

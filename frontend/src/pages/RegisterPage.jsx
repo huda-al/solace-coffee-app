@@ -51,7 +51,7 @@ export default function RegisterPage() {
               type={f.type}
               value={form[f.key]}
               onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-              required={f.key !== 'nomor_telepon' && f.key !== 'alamat_pengiriman'}
+              required={f.key !== 'alamat_pengiriman'}
             />
           ))}
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>

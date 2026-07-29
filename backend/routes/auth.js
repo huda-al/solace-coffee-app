@@ -10,6 +10,7 @@ const generateToken = (id) =>
 router.post('/register', async (req, res) => {
   try {
     const { nama, email, password, nomor_telepon, alamat_pengiriman } = req.body;
+    if (!nomor_telepon) return res.status(400).json({ message: 'Nomor WhatsApp wajib diisi' });
     const exists = await Pelanggan.findOne({ email });
     if (exists) return res.status(400).json({ message: 'Email sudah terdaftar' });
 
