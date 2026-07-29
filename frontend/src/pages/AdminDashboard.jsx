@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X, Phone, MessageCircle } from 'lucide-react';
+import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X, Phone, MessageCircle, Download } from 'lucide-react';
 import dashboardLogo from '../assets/dashboard.png';
 const STATUS_OPTIONS = [
   { val: 'Menunggu Konfirmasi', label: 'Pending' },
@@ -308,9 +308,38 @@ function OrderManager({ orders, updateStatus, loadData }) {
     return acc;
   }, []);
 
+  const exportToCSV = () => {
+    const headers = ['ID Pesanan', 'Tanggal', 'Nama Pelanggan', 'No WA', 'Alamat', 'Pesanan', 'Total Harga', 'Metode Bayar', 'Status'];
+    const rows = orders.map(o => {
+      const items = o.detail_pesanan.map(d => `${d.nama_menu} (${d.jumlah})`).join('; ');
+      return [
+        o._id,
+        new Date(o.createdAt).toLocaleString('id-ID').replace(',', ''),
+        o.id_pelanggan?.nama || '-',
+        o.id_pelanggan?.nomor_telepon || '-',
+        `"${(o.alamat_pengiriman || '').replace(/"/g, '""')}"`,
+        `"${items}"`,
+        o.total_harga,
+        o.metode_pembayaran || '-',
+        o.status
+      ];
+    });
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `Penjualan_Solace_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div style={s.tableCard}>
-      <h2 style={{ ...s.tableTitle, display: 'flex', alignItems: 'center', gap: 12 }}><Inbox size={24} /> Manajemen Pesanan</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}>
+        <h2 style={{ ...s.tableTitle, display: 'flex', alignItems: 'center', gap: 12, marginBottom: 0 }}><Inbox size={24} /> Manajemen Pesanan</h2>
+        <button onClick={exportToCSV} className="btn-primary" style={{ padding: '8px 16px', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}><Download size={16} /> Download Pembukuan (CSV)</button>
+      </div>
       <div style={{ overflowX: 'auto' }}>
         <table style={s.table}>
           <thead>
