@@ -23,7 +23,7 @@ const LaptopIcon = ({ size }) => (
 export default function AboutPage() {
   return (
     <div className="page-container fade-in" style={{ padding: '60px 24px', maxWidth: 900, margin: '0 auto', minHeight: '80vh' }}>
-      <div style={{ textAlign: 'center', marginBottom: 48 }}>
+      <div className="fade-in" style={{ textAlign: 'center', marginBottom: 48, animationDelay: '0.1s', opacity: 0 }}>
         <h1 style={{ fontFamily: "'Fraunces', sans-serif", fontSize: 48, color: 'var(--dark-red)', marginBottom: 16 }}>Tentang Solace</h1>
         <p style={{ fontSize: 16, color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 600, margin: '0 auto' }}>
           Lebih dari sekadar tempat singgah, Solace adalah ruang nyaman di tengah hiruk-pikuk kota tempat ide-ide lahir bersama secangkir kopi terbaik.
@@ -31,7 +31,7 @@ export default function AboutPage() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, marginBottom: 48 }}>
-        <div style={{ background: '#e8e0d4', padding: 32, borderRadius: 20, textAlign: 'center', border: '1px solid var(--light-tan)' }}>
+        <div className="fade-in" style={{ background: '#e8e0d4', padding: 32, borderRadius: 20, textAlign: 'center', border: '1px solid var(--light-tan)', animationDelay: '0.2s', opacity: 0 }}>
           <div style={{ color: 'var(--dark-red)', marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
             <LaptopIcon size={48} />
           </div>
@@ -41,7 +41,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div style={{ background: '#e8e0d4', padding: 32, borderRadius: 20, textAlign: 'center', border: '1px solid var(--light-tan)' }}>
+        <div className="fade-in" style={{ background: '#e8e0d4', padding: 32, borderRadius: 20, textAlign: 'center', border: '1px solid var(--light-tan)', animationDelay: '0.3s', opacity: 0 }}>
           <div style={{ color: 'var(--dark-red)', marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
             <CoffeeBeanIcon size={48} />
           </div>
@@ -52,7 +52,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      <div style={{ background: 'var(--dark-red)', borderRadius: 24, padding: 40, color: 'var(--light-tan)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <div className="fade-in" style={{ background: 'var(--dark-red)', borderRadius: 24, padding: 40, color: 'var(--light-tan)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative', overflow: 'hidden', animationDelay: '0.4s', opacity: 0 }}>
         <div style={{ marginBottom: 16 }}>
           <MapPinIcon size={40} />
         </div>
