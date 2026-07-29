@@ -1,7 +1,0 @@
-{
-  "name": "solace-coffee",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "npm install --prefix frontend --legacy-peer-deps && npm run build --prefix frontend"
-  }
-}

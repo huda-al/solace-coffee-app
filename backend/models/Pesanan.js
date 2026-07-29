@@ -34,7 +34,7 @@ const pesananSchema = new mongoose.Schema({
   pengiriman: {
     status_pengiriman: {
       type: String,
-      enum: ['Menunggu Konfirmasi', 'Pesanan Dibuat', 'Pesanan Sedang Dikirim', 'Pesanan Telah Selesai'],
+      enum: ['Menunggu Konfirmasi', 'Pesanan Dibuat', 'Pesanan Sedang Dikirim', 'Pesanan Telah Selesai', 'Dibatalkan'],
       default: 'Menunggu Konfirmasi'
     },
     waktu_pengiriman: { type: Date }

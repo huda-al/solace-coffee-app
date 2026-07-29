@@ -38,14 +38,14 @@ export default function MenuPage() {
 
   useEffect(() => {
     axios.get('/api/menu')
-      .then(res => { 
+      .then(res => {
         if (Array.isArray(res.data)) {
-          setMenus(res.data); 
+          setMenus(res.data);
         } else {
           console.error('API did not return an array:', res.data);
           toast.error('Gagal memuat menu: Server error');
         }
-        setLoading(false); 
+        setLoading(false);
       })
       .catch(() => { toast.error('Gagal memuat menu'); setLoading(false); });
   }, []);
@@ -75,7 +75,7 @@ export default function MenuPage() {
                   <div key={item._id} className="menu-card" style={{ animationDelay: `${index * 0.1}s`, ...(item.stok === 0 || !item.tersedia ? { opacity: 0.6, filter: 'grayscale(100%)' } : {}) }}>
                     <div className="menu-img-wrap">
                       {(() => {
-                        let imgSrc = item.gambar ? `http://localhost:5000${item.gambar}` : null;
+                        let imgSrc = item.gambar ? item.gambar : null;
                         const name = item.nama_menu.toLowerCase();
                         let objPos = undefined;
                         if (name === 'americano' || name.includes('americano')) imgSrc = blackImg;
@@ -96,7 +96,7 @@ export default function MenuPage() {
                         else if (name === 'chamomile' || name.includes('chamomile')) imgSrc = chamomileImg;
                         else if (name === 'peppermint' || name.includes('peppermint')) imgSrc = peppermintImg;
                         else if (name === 'darjeeling' || name.includes('darjeeling')) imgSrc = darjeelingImg;
-                        
+
                         return imgSrc
                           ? <img src={imgSrc} alt={item.nama_menu} className="menu-img" style={{ ...(objPos ? { objectPosition: objPos } : {}) }} />
                           : <div className="menu-img"><CoffeeIcon /></div>;

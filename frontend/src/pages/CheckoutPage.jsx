@@ -33,7 +33,7 @@ const CoffeeCupIcon = ({ size }) => (
 );
 
 export default function CheckoutPage() {
-  const { cart, updateQty, removeFromCart, total, clearCart } = useCart();
+  const { cart, updateQty, total, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [metode, setMetode] = useState('COD');
@@ -52,8 +52,8 @@ export default function CheckoutPage() {
   const [showQrisModal, setShowQrisModal] = useState(false);
 
   const getMenuImage = (item) => {
-    let imgSrc = item.gambar ? `http://localhost:5000${item.gambar}` : null;
-    let objPos = undefined;
+    let imgSrc = item.gambar || null;
+    let objPos;
     if (!item.nama_menu) return { imgSrc, objPos };
     const name = item.nama_menu.toLowerCase();
     
@@ -69,13 +69,13 @@ export default function CheckoutPage() {
     else if (name === 'chamomile' || name.includes('chamomile')) imgSrc = chamomileImg;
     else if (name === 'peppermint' || name.includes('peppermint')) imgSrc = peppermintImg;
     else if (name === 'darjeeling' || name.includes('darjeeling')) imgSrc = darjeelingImg;
-    
+
     return { imgSrc, objPos };
   };
 
   // Haversine calculation
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; 
+    const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
     // Solace Coffee origin: Lamgugob, Syiah Kuala
     const dist = getDistanceFromLatLonInKm(5.569361, 95.355377, latlng.lat, latlng.lng);
     setDistance(dist);
-    
+
     let ongkir = 0;
     if (dist > 1) {
       ongkir = 2000 + Math.floor(dist - 1) * 1000;
@@ -146,12 +146,12 @@ export default function CheckoutPage() {
         jumlah: item.jumlah,
         subtotal: item.harga * item.jumlah
       }));
-      const res = await axios.post('/api/orders', { 
-        detail_pesanan, 
-        total_harga: grandTotal, 
+      const res = await axios.post('/api/orders', {
+        detail_pesanan,
+        total_harga: grandTotal,
         biaya_pengiriman: finalShipping,
         diskon: finalDiscount,
-        metode_pembayaran: metode, 
+        metode_pembayaran: metode,
         alamat_pengiriman: alamat,
         titik_lokasi: titikLokasi
       });
@@ -169,7 +169,7 @@ export default function CheckoutPage() {
   const handleOrder = () => {
     if (!user) { toast.error('Login dulu ya!'); return navigate('/login'); }
     if (!alamat.trim()) { toast.error('Isi alamat pengiriman dulu!'); return; }
-    
+
     if (metode === 'QRIS') {
       setShowQrisModal(true);
     } else {
@@ -202,41 +202,41 @@ export default function CheckoutPage() {
                     <CoffeeCupIcon size={24} />
                   )}
                 </div>
-              <div style={{ flex: 1 }}>
-                <p style={s.itemName}>{item.nama_menu}</p>
-                <p style={s.itemPrice}>Rp {item.harga.toLocaleString('id-ID')}</p>
-                <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
-                  {['Ice', 'Hot'].map(v => {
-                    const isSelected = (variants[item._id] || 'Ice') === v;
-                    return (
-                      <button
-                        key={v}
-                        onClick={() => setVariants({...variants, [item._id]: v})}
-                        style={{
-                          padding: '4px 12px',
-                          borderRadius: 6,
-                          border: 'none',
-                          background: isSelected ? 'var(--dark-red)' : 'var(--light-tan)',
-                          color: isSelected ? 'white' : 'var(--dark-red)',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          fontSize: 11
-                        }}
-                      >
-                        {v}
-                      </button>
-                    );
-                  })}
+                <div style={{ flex: 1 }}>
+                  <p style={s.itemName}>{item.nama_menu}</p>
+                  <p style={s.itemPrice}>Rp {item.harga.toLocaleString('id-ID')}</p>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                    {['Ice', 'Hot'].map(v => {
+                      const isSelected = (variants[item._id] || 'Ice') === v;
+                      return (
+                        <button
+                          key={v}
+                          onClick={() => setVariants({ ...variants, [item._id]: v })}
+                          style={{
+                            padding: '4px 12px',
+                            borderRadius: 6,
+                            border: 'none',
+                            background: isSelected ? 'var(--dark-red)' : 'var(--light-tan)',
+                            color: isSelected ? 'white' : 'var(--dark-red)',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            fontSize: 11
+                          }}
+                        >
+                          {v}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div style={s.qtyWrap}>
+                  <button style={s.qtyBtn} onClick={() => updateQty(item._id, item.jumlah - 1)}>−</button>
+                  <span style={s.qtyNum}>{item.jumlah}</span>
+                  <button style={s.qtyBtn} onClick={() => updateQty(item._id, item.jumlah + 1)}>+</button>
                 </div>
               </div>
-              <div style={s.qtyWrap}>
-                <button style={s.qtyBtn} onClick={() => updateQty(item._id, item.jumlah - 1)}>−</button>
-                <span style={s.qtyNum}>{item.jumlah}</span>
-                <button style={s.qtyBtn} onClick={() => updateQty(item._id, item.jumlah + 1)}>+</button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
         </div>
 
         {/* Summary */}
@@ -270,7 +270,7 @@ export default function CheckoutPage() {
                 onChange={e => setPromoInput(e.target.value)}
                 style={{ flex: 1, padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 13, textTransform: 'uppercase' }}
               />
-              <button 
+              <button
                 onClick={applyPromo}
                 style={{ padding: '10px 16px', background: 'var(--dark-red)', color: 'white', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', fontSize: 13 }}
               >
@@ -331,7 +331,7 @@ export default function CheckoutPage() {
           <div style={{ background: '#fff', padding: 32, borderRadius: 20, width: '100%', maxWidth: 400, textAlign: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
             <h2 style={{ fontFamily: "'Fraunces', sans-serif", fontSize: 24, color: 'var(--dark-red)', marginBottom: 8 }}>Pembayaran QRIS</h2>
             <p style={{ fontSize: 14, color: 'var(--text-muted)', marginBottom: 20 }}>Scan kode QR di bawah ini menggunakan aplikasi M-Banking atau e-Wallet Anda.</p>
-            
+
             <div style={{ padding: 16, border: '2px dashed var(--border)', borderRadius: 16, display: 'inline-block', marginBottom: 20, background: '#f9f9f9' }}>
               <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SolaceCoffee_${grandTotal}`} alt="QRIS Code" style={{ width: 200, height: 200 }} />
             </div>
@@ -341,16 +341,16 @@ export default function CheckoutPage() {
               <p style={{ fontFamily: "'Fraunces', sans-serif", fontSize: 28, color: 'var(--dark-red)', fontWeight: 700 }}>Rp {grandTotal.toLocaleString('id-ID')}</p>
             </div>
 
-            <button 
-              className="btn-primary" 
-              style={{ width: '100%', justifyContent: 'center', borderRadius: 10, padding: 14, fontSize: 16, marginBottom: 12 }} 
-              onClick={submitOrder} 
+            <button
+              className="btn-primary"
+              style={{ width: '100%', justifyContent: 'center', borderRadius: 10, padding: 14, fontSize: 16, marginBottom: 12 }}
+              onClick={submitOrder}
               disabled={loading}
             >
               {loading ? 'Memproses...' : 'Saya Sudah Membayar'}
             </button>
-            <button 
-              style={{ width: '100%', padding: 14, borderRadius: 10, border: 'none', background: 'transparent', color: 'var(--text-muted)', fontWeight: 600, cursor: 'pointer', fontSize: 15 }} 
+            <button
+              style={{ width: '100%', padding: 14, borderRadius: 10, border: 'none', background: 'transparent', color: 'var(--text-muted)', fontWeight: 600, cursor: 'pointer', fontSize: 15 }}
               onClick={() => setShowQrisModal(false)}
             >
               Batal

@@ -12,11 +12,32 @@ export default function StatusPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = () => axios.get(`/api/orders/${id}`).then(r => { setOrder(r.data); setLoading(false); });
+    let isMounted = true;
+    const fetch = () => {
+      axios.get(`/api/orders/${id}`)
+        .then(r => { 
+          if (isMounted) {
+            setOrder(r.data); 
+            setLoading(false); 
+          }
+        })
+        .catch(err => {
+          if (isMounted) {
+            console.error('Error fetching order:', err);
+            setLoading(false);
+            if (err.response && err.response.status === 404) {
+              clearInterval(interval);
+            }
+          }
+        });
+    };
     fetch();
     // Poll every 10 seconds for real-time updates
     const interval = setInterval(fetch, 10000);
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [id]);
 
   if (loading) return <div className="loading">Memuat status pesanan...</div>;

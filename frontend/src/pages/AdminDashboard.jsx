@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X } from 'lucide-react';
+import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X, Phone, MessageCircle } from 'lucide-react';
 import dashboardLogo from '../assets/dashboard.png';
 const STATUS_OPTIONS = [
   { val: 'Menunggu Konfirmasi', label: 'Pending' },
@@ -18,6 +18,14 @@ const copyToClipboard = (text) => {
   if (!text) return;
   navigator.clipboard.writeText(text);
   toast.success('Alamat disalin ke clipboard!');
+};
+
+const getWaLink = (phone, orderId, name) => {
+  if (!phone) return '#';
+  let cleanPhone = phone.replace(/\D/g, '');
+  if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+  const msg = `Halo kak ${name}, ini dari kurir Solace Coffee. Saya sedang membawa pesanan kakak dengan ID ${orderId.substring(0,8).toUpperCase()}. Mohon konfirmasi patokan alamatnya ya kak...`;
+  return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
 };
 
 function Sidebar({ active }) {
@@ -332,49 +340,73 @@ function OrderManager({ orders, updateStatus, loadData }) {
                 </td>
                 <td style={s.td}>
                   <div style={{ fontWeight: 600 }}>{order.id_pelanggan?.nama || '-'}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{order.alamat_pengiriman}</div>
-                    <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--dark-red)', padding: 0, display: 'flex' }} title="Copy Alamat">
-                      <Copy size={14} />
-                    </button>
-                    {order.titik_lokasi && order.titik_lokasi.lat && (
-                      <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#1a73e8', padding: 0, display: 'flex' }} title="Buka di Maps">
-                        <MapPin size={14} />
+                  {order.id_pelanggan?.nomor_telepon && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, marginBottom: 4 }}>
+                      <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>{order.id_pelanggan.nomor_telepon}</span>
+                      <a href={`tel:${order.id_pelanggan.nomor_telepon}`} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--dark-red)', display: 'flex', alignItems: 'center' }} title="Telepon">
+                        <Phone size={14} />
                       </a>
-                    )}
+                      <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#25D366', display: 'flex', alignItems: 'center' }} title="WhatsApp">
+                        <MessageCircle size={15} />
+                      </a>
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginTop: 2 }}>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', maxWidth: 220, lineHeight: 1.4, wordBreak: 'break-word' }}>{order.alamat_pengiriman}</div>
+                    <div style={{ display: 'flex', gap: 6, paddingTop: 2 }}>
+                      <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--dark-red)', padding: 0, display: 'flex' }} title="Copy Alamat">
+                        <Copy size={14} />
+                      </button>
+                      {order.titik_lokasi && order.titik_lokasi.lat && (
+                        <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#1a73e8', padding: 0, display: 'flex' }} title="Buka di Maps">
+                          <MapPin size={14} />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td style={s.td}>Rp {order.total_harga.toLocaleString('id-ID')}</td>
                 <td style={s.td}>
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', minWidth: 280 }}>
-                    {STATUS_OPTIONS.map(opt => {
-                      const isSelected = order.status_pesanan === opt.val;
-                      const isDone = order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan';
-                      return (
-                        <button 
-                          key={opt.val} 
-                          disabled={isDone && !isSelected}
-                          onClick={() => updateStatus(order._id, opt.val)}
-                          style={{
-                            padding: '4px 10px',
-                            borderRadius: 6,
-                            border: 'none',
-                            background: isSelected ? 'var(--dark-red)' : 'var(--light-tan)',
-                            color: isSelected ? 'white' : 'var(--dark-red)',
-                            fontWeight: 600,
-                            cursor: (isDone && !isSelected) ? 'not-allowed' : 'pointer',
-                            fontSize: 11,
-                            opacity: (isDone && !isSelected) ? 0.4 : 1
-                          }}
-                        >
-                          {opt.label}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  {(() => {
+                    const isDone = order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan';
+                    return (
+                      <select 
+                        value={order.status_pesanan}
+                        onChange={(e) => updateStatus(order._id, e.target.value)}
+                        disabled={isDone}
+                        style={{
+                          ...s.select,
+                          background: isDone ? 'var(--light-tan)' : 'white',
+                          color: isDone ? 'var(--text-muted)' : 'var(--dark-red)',
+                          fontWeight: 600,
+                          cursor: isDone ? 'not-allowed' : 'pointer',
+                          opacity: isDone ? 0.7 : 1,
+                          border: '1px solid ' + (isDone ? 'var(--border)' : 'var(--dark-red)'),
+                          outline: 'none',
+                          padding: '8px 12px'
+                        }}
+                      >
+                        {STATUS_OPTIONS.map(opt => (
+                          <option key={opt.val} value={opt.val}>{opt.label}</option>
+                        ))}
+                      </select>
+                    );
+                  })()}
                 </td>
                 <td style={s.td}>
-                  <button disabled={order.status_pesanan === 'Pesanan Telah Selesai'} onClick={() => setEditingOrder(JSON.parse(JSON.stringify(order)))} style={{...s.btnEdit, opacity: order.status_pesanan === 'Pesanan Telah Selesai' ? 0.5 : 1, cursor: order.status_pesanan === 'Pesanan Telah Selesai' ? 'not-allowed' : 'pointer'}}>Edit Item</button>
+                  <button 
+                    disabled={order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan'} 
+                    onClick={() => setEditingOrder(JSON.parse(JSON.stringify(order)))} 
+                    style={{
+                      ...s.btnEdit, 
+                      padding: '4px 8px',
+                      fontSize: 10,
+                      opacity: (order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan') ? 0.5 : 1, 
+                      cursor: (order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan') ? 'not-allowed' : 'pointer'
+                    }}
+                  >
+                    Edit Item
+                  </button>
                 </td>
               </tr>
             ))}
@@ -427,6 +459,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const prevOrdersRef = useRef([]);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -435,25 +468,66 @@ export default function AdminDashboard() {
              : location.pathname.includes('/pesanan') ? 'pesanan' 
              : 'dashboard';
 
-  const loadData = async () => {
+  const loadData = useCallback(async (isPolling = false) => {
     try {
       const [dashRes, ordersRes] = await Promise.all([
         axios.get('/api/admin/dashboard'),
         axios.get('/api/admin/orders')
       ]);
       setStats(dashRes.data);
-      setOrders(ordersRes.data);
+      
+      const newOrdersData = ordersRes.data;
+      
+      if (isPolling === true && prevOrdersRef.current.length > 0) {
+        const prevPendingIds = new Set(prevOrdersRef.current.filter(o => o.status_pesanan === 'Menunggu Konfirmasi').map(o => o._id));
+        const newPending = newOrdersData.filter(o => o.status_pesanan === 'Menunggu Konfirmasi' && !prevPendingIds.has(o._id));
+        
+        if (newPending.length > 0) {
+          toast.info(`🔔 Ada ${newPending.length} pesanan baru masuk!`, {
+            position: "top-right",
+            autoClose: 5000,
+          });
+          // Play notification sound
+          try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            osc.connect(ctx.destination);
+            osc.frequency.setValueAtTime(880, ctx.currentTime);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+            
+            setTimeout(() => {
+              const osc2 = ctx.createOscillator();
+              osc2.connect(ctx.destination);
+              osc2.frequency.setValueAtTime(1046.50, ctx.currentTime);
+              osc2.start();
+              osc2.stop(ctx.currentTime + 0.2);
+            }, 150);
+          } catch (e) {}
+        }
+      }
+      
+      prevOrdersRef.current = newOrdersData;
+      setOrders(newOrdersData);
+      
     } catch {
-      toast.error('Gagal memuat data');
+      if (isPolling !== true) toast.error('Gagal memuat data');
     } finally {
-      setLoading(false);
+      if (isPolling !== true) setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (!user || user.role !== 'admin') { navigate('/login'); return; }
-    loadData();
-  }, [user, navigate]);
+    loadData(false);
+    
+    // Auto-refresh data every 10 seconds to check for new orders
+    const interval = setInterval(() => {
+      loadData(true);
+    }, 10000);
+    
+    return () => clearInterval(interval);
+  }, [user, navigate, loadData]);
 
   const updateStatus = async (orderId, status) => {
     try {
@@ -546,8 +620,20 @@ export default function AdminDashboard() {
                       onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                       onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                        <span style={s.incomingName}>{order.id_pelanggan?.nama || 'Pelanggan'}</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                        <div>
+                          <div style={s.incomingName}>{order.id_pelanggan?.nama || 'Pelanggan'}</div>
+                          {order.id_pelanggan?.nomor_telepon && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6 }}>
+                              <a href={`tel:${order.id_pelanggan.nomor_telepon}`} onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 4, padding: '2px 6px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 4, textDecoration: 'none', fontSize: 10, fontWeight: 600 }}>
+                                <Phone size={10} /> Call
+                              </a>
+                              <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 4, padding: '2px 6px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 4, textDecoration: 'none', fontSize: 10, fontWeight: 600 }}>
+                                <MessageCircle size={10} /> WA
+                              </a>
+                            </div>
+                          )}
+                        </div>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
                           <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                             {new Date(order.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
@@ -636,7 +722,7 @@ const s = {
   td: { padding: '12px 12px', fontSize: 13, verticalAlign: 'middle' },
   select: { padding: '6px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'white', fontSize: 12, cursor: 'pointer', color: 'var(--text-dark)' },
   qtyBtn: { width: 32, height: 32, borderRadius: 8, background: '#eee', border: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s' },
-  btnEdit: { background: '#f5f5f5', border: '1px solid #ddd', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer', color: '#333' },
+  btnEdit: { background: 'var(--light-tan)', border: '1px solid var(--dark-red)', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer', color: 'var(--dark-red)' },
   modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
   modalContent: { background: 'white', padding: 32, borderRadius: 16, width: '100%', maxWidth: 450, boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }
 };
