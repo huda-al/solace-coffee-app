@@ -352,7 +352,7 @@ function OrderManager({ orders, updateStatus, loadData }) {
                     </div>
                   )}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8, marginTop: 4 }}>
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, wordBreak: 'break-word', width: '100%' }}>
+                    <div style={{ fontSize: 12, color: 'var(--text-dark)', fontWeight: 600, lineHeight: 1.5, wordBreak: 'break-word', width: '100%' }}>
                       {order.alamat_pengiriman}
                     </div>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
