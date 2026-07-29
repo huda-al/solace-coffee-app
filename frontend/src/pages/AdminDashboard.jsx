@@ -375,7 +375,7 @@ function OrderManager({ orders, updateStatus, loadData }) {
                           <a href={`tel:${order.id_pelanggan.nomor_telepon}`} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Telepon">
                             <Phone size={14} /> Call
                           </a>
-                          <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 6, padding: '6px 12px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="WhatsApp">
+                          <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="WhatsApp">
                             <MessageCircle size={14} /> WA
                           </a>
                         </div>
@@ -385,11 +385,11 @@ function OrderManager({ orders, updateStatus, loadData }) {
                           {order.alamat_pengiriman}
                         </div>
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                          <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: '#f5f5f5', border: '1px solid #ccc', borderRadius: 6, cursor: 'pointer', color: 'var(--text-dark)', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }} title="Copy Alamat">
+                          <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: 'transparent', border: '1px solid var(--dark-red)', borderRadius: 6, cursor: 'pointer', color: 'var(--dark-red)', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }} title="Copy Alamat">
                             <Copy size={14} /> Salin
                           </button>
                           {order.titik_lokasi && order.titik_lokasi.lat && (
-                            <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: '#e3f2fd', border: '1px solid #1a73e8', borderRadius: 6, cursor: 'pointer', color: '#1a73e8', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Buka di Maps">
+                            <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, cursor: 'pointer', color: 'var(--dark-red)', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Buka di Maps">
                               <MapPin size={14} /> Maps
                             </a>
                           )}
@@ -659,7 +659,7 @@ export default function AdminDashboard() {
                               <a href={`tel:${order.id_pelanggan.nomor_telepon}`} onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '8px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
                                 <Phone size={14} /> Call
                               </a>
-                              <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 6, padding: '8px 12px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
+                              <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '8px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
                                 <MessageCircle size={14} /> WhatsApp
                               </a>
                             </div>
