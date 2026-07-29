@@ -24,7 +24,7 @@ const getWaLink = (phone, orderId, name) => {
   if (!phone) return '#';
   let cleanPhone = phone.replace(/\D/g, '');
   if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
-  const msg = `Halo kak ${name}, ini dari kurir Solace Coffee. Saya sedang membawa pesanan kakak dengan ID ${orderId.substring(0,8).toUpperCase()}. Mohon konfirmasi patokan alamatnya ya kak...`;
+  const msg = `Halo kak ${name}, ini dari kurir Solace Coffee. Saya sedang membawa pesanan kakak dengan ID ${orderId.substring(0, 8).toUpperCase()}. Mohon konfirmasi patokan alamatnya ya kak...`;
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
 };
 
@@ -106,10 +106,10 @@ function ProdukManager() {
 
     try {
       if (editingMenu) {
-        await axios.put(`/api/menu/${editingMenu._id}`, data, { headers: { 'Content-Type': 'multipart/form-data' }});
+        await axios.put(`/api/menu/${editingMenu._id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
         toast.success('Produk berhasil diperbarui');
       } else {
-        await axios.post('/api/menu', data, { headers: { 'Content-Type': 'multipart/form-data' }});
+        await axios.post('/api/menu', data, { headers: { 'Content-Type': 'multipart/form-data' } });
         toast.success('Produk berhasil ditambahkan');
       }
       setShowModal(false);
@@ -143,7 +143,7 @@ function ProdukManager() {
         <h2 style={{ ...s.tableTitle, display: 'flex', alignItems: 'center', gap: 12 }}><Package size={24} /> Manajemen Produk</h2>
         <button onClick={openAdd} className="btn-primary" style={{ padding: '8px 16px', fontSize: 14 }}><Plus size={16} /> Tambah Produk</button>
       </div>
-      
+
       {Object.entries(groupedMenus).map(([kategori, items]) => (
         <div key={kategori} style={{ marginBottom: 32 }}>
           <h3 style={{ fontFamily: "'Fraunces', sans-serif", fontSize: 18, color: 'var(--dark-red)', paddingBottom: 8, borderBottom: '2px solid var(--light-tan)', marginBottom: 16 }}>{kategori}</h3>
@@ -169,7 +169,7 @@ function ProdukManager() {
                   <td style={s.td}>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                       <button onClick={() => updateStok(m._id, Math.max(0, m.stok - 1))} style={s.qtyBtn}>-</button>
-                      <input 
+                      <input
                         type="number"
                         min="0"
                         key={m.stok}
@@ -181,7 +181,7 @@ function ProdukManager() {
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') e.target.blur();
                         }}
-                        style={{ fontWeight: 'bold', width: 44, textAlign: 'center', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 0', outline: 'none' }} 
+                        style={{ fontWeight: 'bold', width: 44, textAlign: 'center', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 0', outline: 'none' }}
                       />
                       <button onClick={() => updateStok(m._id, m.stok + 1)} style={s.qtyBtn}>+</button>
                     </div>
@@ -210,17 +210,17 @@ function ProdukManager() {
                 <X size={24} />
               </button>
             </div>
-            
+
             <form onSubmit={saveMenu} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Nama Produk</label>
-                <input type="text" className="input-field" value={formData.nama_menu} onChange={(e) => setFormData({...formData, nama_menu: e.target.value})} required placeholder="Contoh: Caramel Macchiato" />
+                <input type="text" className="input-field" value={formData.nama_menu} onChange={(e) => setFormData({ ...formData, nama_menu: e.target.value })} required placeholder="Contoh: Caramel Macchiato" />
               </div>
-              
+
               <div style={{ display: 'flex', gap: 16 }}>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Kategori</label>
-                  <select className="input-field" value={formData.kategori} onChange={(e) => setFormData({...formData, kategori: e.target.value})} required>
+                  <select className="input-field" value={formData.kategori} onChange={(e) => setFormData({ ...formData, kategori: e.target.value })} required>
                     <option value="Classic">Classic</option>
                     <option value="Coffee Base">Coffee Base</option>
                     <option value="Non Coffee">Non Coffee</option>
@@ -229,23 +229,23 @@ function ProdukManager() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Harga (Rp)</label>
-                  <input type="number" min="0" className="input-field" value={formData.harga} onChange={(e) => setFormData({...formData, harga: e.target.value})} required placeholder="25000" />
+                  <input type="number" min="0" className="input-field" value={formData.harga} onChange={(e) => setFormData({ ...formData, harga: e.target.value })} required placeholder="25000" />
                 </div>
               </div>
 
               <div>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Deskripsi (Opsional)</label>
-                <textarea className="input-field" value={formData.deskripsi} onChange={(e) => setFormData({...formData, deskripsi: e.target.value})} placeholder="Penjelasan singkat mengenai produk ini..." rows="3" style={{ resize: 'vertical' }}></textarea>
+                <textarea className="input-field" value={formData.deskripsi} onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })} placeholder="Penjelasan singkat mengenai produk ini..." rows="3" style={{ resize: 'vertical' }}></textarea>
               </div>
 
               <div style={{ display: 'flex', gap: 16 }}>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Stok Awal</label>
-                  <input type="number" min="0" className="input-field" value={formData.stok} onChange={(e) => setFormData({...formData, stok: e.target.value})} required />
+                  <input type="number" min="0" className="input-field" value={formData.stok} onChange={(e) => setFormData({ ...formData, stok: e.target.value })} required />
                 </div>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Status Tersedia</label>
-                  <select className="input-field" value={formData.tersedia} onChange={(e) => setFormData({...formData, tersedia: e.target.value === 'true'})}>
+                  <select className="input-field" value={formData.tersedia} onChange={(e) => setFormData({ ...formData, tersedia: e.target.value === 'true' })}>
                     <option value="true">Tersedia (Aktif)</option>
                     <option value="false">Tidak Tersedia</option>
                   </select>
@@ -328,7 +328,7 @@ function OrderManager({ orders, updateStatus, loadData }) {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `Penjualan_Solace_${new Date().toISOString().slice(0,10)}.csv`);
+    link.setAttribute("download", `Penjualan_Solace_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -363,85 +363,85 @@ function OrderManager({ orders, updateStatus, loadData }) {
                 </tr>
                 {group.items.map(order => (
                   <tr key={order._id} style={s.tr}>
-                    <td style={{...s.td, fontSize: 12}}>
-                      <div style={{ fontWeight: 600 }}>{order._id.substring(0,8).toUpperCase()}</div>
+                    <td style={{ ...s.td, fontSize: 12 }}>
+                      <div style={{ fontWeight: 600 }}>{order._id.substring(0, 8).toUpperCase()}</div>
                       <div style={{ color: 'var(--text-muted)' }}>{new Date(order.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</div>
-                </td>
-                <td style={s.td}>
-                  <div style={{ fontWeight: 600 }}>{order.id_pelanggan?.nama || '-'}</div>
-                  {order.id_pelanggan?.nomor_telepon && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6, marginBottom: 8, flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600, width: '100%' }}>{order.id_pelanggan.nomor_telepon}</span>
-                      <a href={`tel:${order.id_pelanggan.nomor_telepon}`} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Telepon">
-                        <Phone size={14} /> Call
-                      </a>
-                      <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 6, padding: '6px 12px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="WhatsApp">
-                        <MessageCircle size={14} /> WA
-                      </a>
-                    </div>
-                  )}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8, marginTop: 4 }}>
-                    <div style={{ fontSize: 12, color: 'var(--text-dark)', fontWeight: 600, lineHeight: 1.5, wordBreak: 'break-word', width: '100%' }}>
-                      {order.alamat_pengiriman}
-                    </div>
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: '#f5f5f5', border: '1px solid #ccc', borderRadius: 6, cursor: 'pointer', color: 'var(--text-dark)', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }} title="Copy Alamat">
-                        <Copy size={14} /> Salin
-                      </button>
-                      {order.titik_lokasi && order.titik_lokasi.lat && (
-                        <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: '#e3f2fd', border: '1px solid #1a73e8', borderRadius: 6, cursor: 'pointer', color: '#1a73e8', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Buka di Maps">
-                          <MapPin size={14} /> Maps
-                        </a>
+                    </td>
+                    <td style={s.td}>
+                      <div style={{ fontWeight: 600 }}>{order.id_pelanggan?.nama || '-'}</div>
+                      {order.id_pelanggan?.nomor_telepon && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6, marginBottom: 8, flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600, width: '100%' }}>{order.id_pelanggan.nomor_telepon}</span>
+                          <a href={`tel:${order.id_pelanggan.nomor_telepon}`} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Telepon">
+                            <Phone size={14} /> Call
+                          </a>
+                          <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" style={{ background: '#E8F9F0', border: '1px solid #25D366', borderRadius: 6, padding: '6px 12px', color: '#128C7E', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="WhatsApp">
+                            <MessageCircle size={14} /> WA
+                          </a>
+                        </div>
                       )}
-                    </div>
-                  </div>
-                </td>
-                <td style={s.td}>Rp {order.total_harga.toLocaleString('id-ID')}</td>
-                <td style={s.td}>
-                  {(() => {
-                    const isDone = order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan';
-                    return (
-                      <select 
-                        value={order.status_pesanan}
-                        onChange={(e) => updateStatus(order._id, e.target.value)}
-                        disabled={isDone}
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8, marginTop: 4 }}>
+                        <div style={{ fontSize: 12, color: 'var(--text-dark)', fontWeight: 600, lineHeight: 1.5, wordBreak: 'break-word', width: '100%' }}>
+                          {order.alamat_pengiriman}
+                        </div>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          <button onClick={() => copyToClipboard(order.alamat_pengiriman)} style={{ background: '#f5f5f5', border: '1px solid #ccc', borderRadius: 6, cursor: 'pointer', color: 'var(--text-dark)', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }} title="Copy Alamat">
+                            <Copy size={14} /> Salin
+                          </button>
+                          {order.titik_lokasi && order.titik_lokasi.lat && (
+                            <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" style={{ background: '#e3f2fd', border: '1px solid #1a73e8', borderRadius: 6, cursor: 'pointer', color: '#1a73e8', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }} title="Buka di Maps">
+                              <MapPin size={14} /> Maps
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td style={s.td}>Rp {order.total_harga.toLocaleString('id-ID')}</td>
+                    <td style={s.td}>
+                      {(() => {
+                        const isDone = order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan';
+                        return (
+                          <select
+                            value={order.status_pesanan}
+                            onChange={(e) => updateStatus(order._id, e.target.value)}
+                            disabled={isDone}
+                            style={{
+                              ...s.select,
+                              background: isDone ? 'var(--light-tan)' : 'white',
+                              color: isDone ? 'var(--text-muted)' : 'var(--dark-red)',
+                              fontWeight: 600,
+                              cursor: isDone ? 'not-allowed' : 'pointer',
+                              opacity: isDone ? 0.7 : 1,
+                              border: '1px solid ' + (isDone ? 'var(--border)' : 'var(--dark-red)'),
+                              outline: 'none',
+                              padding: '8px 12px'
+                            }}
+                          >
+                            {STATUS_OPTIONS.map(opt => (
+                              <option key={opt.val} value={opt.val}>{opt.label}</option>
+                            ))}
+                          </select>
+                        );
+                      })()}
+                    </td>
+                    <td style={s.td}>
+                      <button
+                        disabled={order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan'}
+                        onClick={() => setEditingOrder(JSON.parse(JSON.stringify(order)))}
                         style={{
-                          ...s.select,
-                          background: isDone ? 'var(--light-tan)' : 'white',
-                          color: isDone ? 'var(--text-muted)' : 'var(--dark-red)',
-                          fontWeight: 600,
-                          cursor: isDone ? 'not-allowed' : 'pointer',
-                          opacity: isDone ? 0.7 : 1,
-                          border: '1px solid ' + (isDone ? 'var(--border)' : 'var(--dark-red)'),
-                          outline: 'none',
-                          padding: '8px 12px'
+                          ...s.btnEdit,
+                          padding: '4px 8px',
+                          fontSize: 10,
+                          opacity: (order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan') ? 0.5 : 1,
+                          cursor: (order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan') ? 'not-allowed' : 'pointer'
                         }}
                       >
-                        {STATUS_OPTIONS.map(opt => (
-                          <option key={opt.val} value={opt.val}>{opt.label}</option>
-                        ))}
-                      </select>
-                    );
-                  })()}
-                </td>
-                <td style={s.td}>
-                  <button 
-                    disabled={order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan'} 
-                    onClick={() => setEditingOrder(JSON.parse(JSON.stringify(order)))} 
-                    style={{
-                      ...s.btnEdit, 
-                      padding: '4px 8px',
-                      fontSize: 10,
-                      opacity: (order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan') ? 0.5 : 1, 
-                      cursor: (order.status_pesanan === 'Pesanan Telah Selesai' || order.status_pesanan === 'Dibatalkan') ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    Edit Item
-                  </button>
-                </td>
-              </tr>
-            ))}
-            </React.Fragment>
+                        Edit Item
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
@@ -451,31 +451,31 @@ function OrderManager({ orders, updateStatus, loadData }) {
       {editingOrder && (
         <div style={s.modalOverlay}>
           <div style={s.modalContent}>
-            <h3 style={{...s.tableTitle, marginBottom: 16}}>Edit Pesanan: {editingOrder._id.substring(0,8).toUpperCase()}</h3>
-            <div style={{maxHeight: 400, overflowY: 'auto', marginBottom: 20, paddingRight: 10}}>
+            <h3 style={{ ...s.tableTitle, marginBottom: 16 }}>Edit Pesanan: {editingOrder._id.substring(0, 8).toUpperCase()}</h3>
+            <div style={{ maxHeight: 400, overflowY: 'auto', marginBottom: 20, paddingRight: 10 }}>
               {editingOrder.detail_pesanan.length === 0 ? (
-                <p style={{textAlign: 'center', color: 'var(--text-muted)'}}>Pesanan kosong.</p>
+                <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Pesanan kosong.</p>
               ) : (
                 editingOrder.detail_pesanan.map((item, idx) => (
-                  <div key={idx} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)'}}>
+                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
                     <div>
-                      <p style={{fontWeight: 700, fontSize: 14, margin: 0, color: 'var(--dark-red)'}}>{item.nama_menu}</p>
-                      <p style={{fontSize: 12, color: 'var(--text-muted)', margin: 0}}>Rp {item.harga.toLocaleString('id-ID')}</p>
+                      <p style={{ fontWeight: 700, fontSize: 14, margin: 0, color: 'var(--dark-red)' }}>{item.nama_menu}</p>
+                      <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>Rp {item.harga.toLocaleString('id-ID')}</p>
                     </div>
-                    <div style={{display: 'flex', gap: 12, alignItems: 'center'}}>
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                       <button onClick={() => updateQty(idx, item.jumlah - 1)} style={s.qtyBtn}>-</button>
-                      <span style={{fontWeight: 'bold', width: 24, textAlign: 'center', fontSize: 16}}>{item.jumlah}</span>
+                      <span style={{ fontWeight: 'bold', width: 24, textAlign: 'center', fontSize: 16 }}>{item.jumlah}</span>
                       <button onClick={() => updateQty(idx, item.jumlah + 1)} style={s.qtyBtn}>+</button>
                     </div>
                   </div>
                 ))
               )}
             </div>
-            <div style={{display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 18, marginBottom: 24, padding: '16px 0', borderTop: '2px dashed var(--border)'}}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 18, marginBottom: 24, padding: '16px 0', borderTop: '2px dashed var(--border)' }}>
               <span>Total Baru:</span>
-              <span style={{color: 'var(--dark-red)'}}>Rp {editingOrder.detail_pesanan.reduce((sum, item) => sum + item.subtotal, 0).toLocaleString('id-ID')}</span>
+              <span style={{ color: 'var(--dark-red)' }}>Rp {editingOrder.detail_pesanan.reduce((sum, item) => sum + item.subtotal, 0).toLocaleString('id-ID')}</span>
             </div>
-            <div style={{display: 'flex', gap: 12}}>
+            <div style={{ display: 'flex', gap: 12 }}>
               <button onClick={() => setEditingOrder(null)} style={s.btnDecline}>Batal</button>
               <button onClick={saveEdit} style={s.btnAccept}>Simpan Perubahan</button>
             </div>
@@ -495,9 +495,9 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const view = location.pathname.includes('/produk') ? 'produk' 
-             : location.pathname.includes('/pesanan') ? 'pesanan' 
-             : 'dashboard';
+  const view = location.pathname.includes('/produk') ? 'produk'
+    : location.pathname.includes('/pesanan') ? 'pesanan'
+      : 'dashboard';
 
   const loadData = useCallback(async (isPolling = false) => {
     try {
@@ -506,13 +506,13 @@ export default function AdminDashboard() {
         axios.get('/api/admin/orders')
       ]);
       setStats(dashRes.data);
-      
+
       const newOrdersData = ordersRes.data;
-      
+
       if (isPolling === true && prevOrdersRef.current.length > 0) {
         const prevPendingIds = new Set(prevOrdersRef.current.filter(o => o.status_pesanan === 'Menunggu Konfirmasi').map(o => o._id));
         const newPending = newOrdersData.filter(o => o.status_pesanan === 'Menunggu Konfirmasi' && !prevPendingIds.has(o._id));
-        
+
         if (newPending.length > 0) {
           toast.info(`🔔 Ada ${newPending.length} pesanan baru masuk!`, {
             position: "top-right",
@@ -526,7 +526,7 @@ export default function AdminDashboard() {
             osc.frequency.setValueAtTime(880, ctx.currentTime);
             osc.start();
             osc.stop(ctx.currentTime + 0.1);
-            
+
             setTimeout(() => {
               const osc2 = ctx.createOscillator();
               osc2.connect(ctx.destination);
@@ -534,13 +534,13 @@ export default function AdminDashboard() {
               osc2.start();
               osc2.stop(ctx.currentTime + 0.2);
             }, 150);
-          } catch (e) {}
+          } catch (e) { }
         }
       }
-      
+
       prevOrdersRef.current = newOrdersData;
       setOrders(newOrdersData);
-      
+
     } catch {
       if (isPolling !== true) toast.error('Gagal memuat data');
     } finally {
@@ -551,12 +551,12 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!user || user.role !== 'admin') { navigate('/login'); return; }
     loadData(false);
-    
+
     // Auto-refresh data every 10 seconds to check for new orders
     const interval = setInterval(() => {
       loadData(true);
     }, 10000);
-    
+
     return () => clearInterval(interval);
   }, [user, navigate, loadData]);
 
@@ -606,21 +606,21 @@ export default function AdminDashboard() {
                     <AreaChart data={stats.chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorPendapatan" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="var(--dark-red)" stopOpacity={0.6}/>
-                          <stop offset="95%" stopColor="var(--dark-red)" stopOpacity={0}/>
+                          <stop offset="5%" stopColor="var(--dark-red)" stopOpacity={0.6} />
+                          <stop offset="95%" stopColor="var(--dark-red)" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
                       <XAxis dataKey="day" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-                      <YAxis 
-                        stroke="var(--text-muted)" 
-                        fontSize={12} 
-                        tickLine={false} 
+                      <YAxis
+                        stroke="var(--text-muted)"
+                        fontSize={12}
+                        tickLine={false}
                         axisLine={false}
                         tickFormatter={(value) => value === 0 ? '0' : `Rp ${(value / 1000).toLocaleString('id-ID')}k`}
                         width={80}
                       />
-                      <Tooltip 
+                      <Tooltip
                         contentStyle={{ borderRadius: 8, border: 'none', boxShadow: 'var(--shadow)', background: 'var(--card-bg)' }}
                         formatter={(value) => [`Rp ${value.toLocaleString('id-ID')}`, 'Pendapatan']}
                         labelStyle={{ color: 'var(--dark-red)', fontWeight: 'bold', marginBottom: 4 }}
@@ -644,9 +644,9 @@ export default function AdminDashboard() {
               ) : (
                 <div style={s.incomingGrid}>
                   {incomingOrders.map(order => (
-                    <div 
-                      key={order._id} 
-                      style={{...s.incomingCard, cursor: 'pointer', transition: 'transform 0.2s', '&:hover': {transform: 'translateY(-2px)'}}} 
+                    <div
+                      key={order._id}
+                      style={{ ...s.incomingCard, cursor: 'pointer', transition: 'transform 0.2s', '&:hover': { transform: 'translateY(-2px)' } }}
                       onClick={() => navigate('/admin/pesanan')}
                       onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                       onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -709,7 +709,7 @@ export default function AdminDashboard() {
         )}
 
         {view === 'produk' && <ProdukManager />}
-        
+
         {view === 'pesanan' && <OrderManager orders={orders} updateStatus={updateStatus} loadData={loadData} />}
       </main>
     </div>
