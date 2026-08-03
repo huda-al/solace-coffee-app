@@ -88,7 +88,6 @@ export default function CheckoutPage() {
   const handleCoordinatesChange = (latlng) => {
     if (!latlng || !latlng.lat || !latlng.lng) return;
     setTitikLokasi({ lat: latlng.lat, lng: latlng.lng });
-    // Solace Coffee origin: Lamgugob, Syiah Kuala
     const dist = getDistanceFromLatLonInKm(5.569361, 95.355377, latlng.lat, latlng.lng);
     setDistance(dist);
 
