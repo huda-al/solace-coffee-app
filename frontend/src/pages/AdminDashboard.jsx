@@ -227,27 +227,28 @@ function ProdukManager() {
 
       {/* Modal Tambah/Edit Produk */}
       {showModal && (
-        <div style={s.modalOverlay}>
-          <div style={{ ...s.modalContent, maxWidth: 500 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ fontFamily: "'Fraunces', sans-serif", color: 'var(--dark-red)', fontSize: 20 }}>
-                {editingMenu ? 'Edit Produk' : 'Tambah Produk Baru'}
+        <div style={{ ...s.modalOverlay, backdropFilter: 'blur(5px)' }} className="fade-in">
+          <div style={{ ...s.modalContent, maxWidth: 550, border: '2px solid var(--dark-red)', background: 'var(--white)', padding: 40, maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, borderBottom: '2px solid var(--light-tan)', paddingBottom: 16 }}>
+              <h3 style={{ fontFamily: "'Fraunces', sans-serif", color: 'var(--dark-red)', fontSize: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
+                {editingMenu ? <Edit3 size={28} /> : <Plus size={28} />}
+                {editingMenu ? 'Edit Data Produk' : 'Tambah Produk Baru'}
               </h3>
-              <button onClick={() => setShowModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
-                <X size={24} />
+              <button onClick={() => setShowModal(false)} style={{ background: 'var(--light-tan)', border: 'none', cursor: 'pointer', color: 'var(--dark-red)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s' }} onMouseOver={e => e.currentTarget.style.transform = 'rotate(90deg) scale(1.1)'} onMouseOut={e => e.currentTarget.style.transform = 'rotate(0deg) scale(1)'}>
+                <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={saveMenu} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form onSubmit={saveMenu} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Nama Produk</label>
-                <input type="text" className="input-field" value={formData.nama_menu} onChange={(e) => setFormData({ ...formData, nama_menu: e.target.value })} required placeholder="Contoh: Caramel Macchiato" />
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--dark-red)', marginBottom: 8, letterSpacing: 0.5 }}>NAMA PRODUK</label>
+                <input type="text" className="input-field" value={formData.nama_menu} onChange={(e) => setFormData({ ...formData, nama_menu: e.target.value })} required placeholder="Contoh: Caramel Macchiato" style={{ background: '#F9F6F0' }} />
               </div>
 
-              <div style={{ display: 'flex', gap: 16 }}>
+              <div style={{ display: 'flex', gap: 20 }}>
                 <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Kategori</label>
-                  <select className="input-field" value={formData.kategori} onChange={(e) => setFormData({ ...formData, kategori: e.target.value })} required>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--dark-red)', marginBottom: 8, letterSpacing: 0.5 }}>KATEGORI</label>
+                  <select className="input-field" value={formData.kategori} onChange={(e) => setFormData({ ...formData, kategori: e.target.value })} required style={{ background: '#F9F6F0', cursor: 'pointer' }}>
                     <option value="Classic">Classic</option>
                     <option value="Coffee Base">Coffee Base</option>
                     <option value="Non Coffee">Non Coffee</option>
@@ -255,38 +256,45 @@ function ProdukManager() {
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Harga (Rp)</label>
-                  <input type="number" min="0" className="input-field" value={formData.harga} onChange={(e) => setFormData({ ...formData, harga: e.target.value })} required placeholder="25000" />
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--dark-red)', marginBottom: 8, letterSpacing: 0.5 }}>HARGA (Rp)</label>
+                  <input type="number" min="0" className="input-field" value={formData.harga} onChange={(e) => setFormData({ ...formData, harga: e.target.value })} required placeholder="25000" style={{ background: '#F9F6F0' }} />
                 </div>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Deskripsi (Opsional)</label>
-                <textarea className="input-field" value={formData.deskripsi} onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })} placeholder="Penjelasan singkat mengenai produk ini..." rows="3" style={{ resize: 'vertical' }}></textarea>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--dark-red)', marginBottom: 8, letterSpacing: 0.5 }}>DESKRIPSI (Opsional)</label>
+                <textarea className="input-field" value={formData.deskripsi} onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })} placeholder="Penjelasan singkat mengenai cita rasa produk ini..." rows="3" style={{ resize: 'vertical', background: '#F9F6F0', lineHeight: 1.5 }}></textarea>
               </div>
 
-              <div style={{ display: 'flex', gap: 16 }}>
+              <div style={{ display: 'flex', gap: 20 }}>
                 <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Stok Awal</label>
-                  <input type="number" min="0" className="input-field" value={formData.stok} onChange={(e) => setFormData({ ...formData, stok: e.target.value })} required />
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--dark-red)', marginBottom: 8, letterSpacing: 0.5 }}>STOK AWAL</label>
+                  <input type="number" min="0" className="input-field" value={formData.stok} onChange={(e) => setFormData({ ...formData, stok: e.target.value })} required style={{ background: '#F9F6F0' }} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Status Tersedia</label>
-                  <select className="input-field" value={formData.tersedia} onChange={(e) => setFormData({ ...formData, tersedia: e.target.value === 'true' })}>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--dark-red)', marginBottom: 8, letterSpacing: 0.5 }}>STATUS KETERSEDIAAN</label>
+                  <select className="input-field" value={formData.tersedia} onChange={(e) => setFormData({ ...formData, tersedia: e.target.value === 'true' })} style={{ background: '#F9F6F0', cursor: 'pointer' }}>
                     <option value="true">Tersedia (Aktif)</option>
                     <option value="false">Tidak Tersedia</option>
                   </select>
                 </div>
               </div>
 
-              <div>
-                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>Foto Produk {editingMenu && '(Kosongkan jika tidak ingin mengubah)'}</label>
-                <input type="file" accept="image/*" onChange={(e) => setGambarFile(e.target.files[0])} className="input-field" style={{ padding: '10px' }} />
+              <div style={{ padding: '20px 24px', background: 'var(--light-tan)', border: '2px dashed var(--dark-red)', borderRadius: 16 }}>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--dark-red)', marginBottom: 12, letterSpacing: 0.5 }}>
+                  FOTO PRODUK {editingMenu && <span style={{ fontWeight: 500, color: 'var(--text-muted)' }}>(Opsional jika tidak diubah)</span>}
+                </label>
+                <input type="file" accept="image/*" onChange={(e) => setGambarFile(e.target.files[0])} className="input-field" style={{ padding: '10px', background: 'white', cursor: 'pointer', border: '1px solid var(--border)' }} />
+                <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 10, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Package size={14} /> Gunakan gambar persegi (1:1) agar foto terlihat rapi.
+                </p>
               </div>
 
-              <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-                <button type="button" onClick={() => setShowModal(false)} className="btn-outline" style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}>Batal</button>
-                <button type="submit" className="btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}>Simpan Produk</button>
+              <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
+                <button type="button" onClick={() => setShowModal(false)} className="btn-outline" style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15 }}>Batal</button>
+                <button type="submit" className="btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15 }}>
+                  {editingMenu ? 'Simpan Perubahan' : 'Tambah Produk'}
+                </button>
               </div>
             </form>
           </div>

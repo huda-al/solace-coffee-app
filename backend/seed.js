@@ -36,6 +36,7 @@ const adminData = {
   nama: 'Zakisyah',
   email: 'admin@solacecoffee.com',
   password: 'admin123',
+  nomor_telepon: '081234567890',
   role: 'admin'
 };
 

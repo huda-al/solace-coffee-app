@@ -96,7 +96,8 @@ export default function LocationPicker({ value, onChange, onCoordinatesChange })
     setShowResults(true);
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=5&accept-language=id`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=8&addressdetails=1&countrycodes=id&accept-language=id`,
+        { headers: { 'Accept-Language': 'id', 'User-Agent': 'SolaceCoffeeApp/1.0' } }
       );
       const data = await res.json();
       setSearchResults(data);
@@ -120,12 +121,12 @@ export default function LocationPicker({ value, onChange, onCoordinatesChange })
   };
 
   return (
-    <div style={styles.container}>
-      {/* Search bar */}
+    <div style={styles.wrapper}>
+      {/* Search bar + results: outside map container to avoid overflow clipping */}
       <div style={styles.searchWrap}>
         <input
           type="text"
-          placeholder="Cari lokasi... (contoh: Jl. Merdeka, Banda Aceh)"
+          placeholder="Cari lokasi... (contoh: Gampong Jawa, Banda Aceh)"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && searchLocation()}
@@ -156,56 +157,58 @@ export default function LocationPicker({ value, onChange, onCoordinatesChange })
       {showResults && !searching && searchResults.length === 0 && searchQuery && (
         <div style={styles.resultsDropdown}>
           <div style={{ padding: '12px 16px', color: 'var(--text-muted)', fontSize: 13 }}>
-            Lokasi tidak ditemukan
+            Lokasi tidak ditemukan. Coba tambahkan nama kota (misal: Desa Xyz, Banda Aceh).
           </div>
         </div>
       )}
 
       {/* Map Container */}
-      <div style={{ position: 'relative' }}>
-        <div ref={mapContainerRef} style={styles.map} />
-        {/* Fixed Center Pin */}
-        <div style={styles.centerPin}>
-          <MapPin size={40} color="var(--dark-red)" style={{ marginTop: -40, fill: 'var(--dark-red)', filter: 'drop-shadow(0px 4px 4px rgba(0,0,0,0.3))' }} />
-        </div>
-      </div>
-
-      {/* Hint */}
-      <p style={styles.hint}>📌 Geser peta untuk menetapkan titik lokasi pengiriman</p>
-
-      {/* Selected address display */}
-      {value && (
-        <div style={styles.selectedAddr}>
-          <span style={{ marginRight: 6 }}>📍</span>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span>{value}</span>
-            {currentCoords && (
-              <span style={{ fontSize: 11, color: '#1a73e8', marginTop: 2, fontWeight: 600 }}>
-                {currentCoords.lat.toFixed(6)}, {currentCoords.lng.toFixed(6)}
-              </span>
-            )}
+      <div style={styles.container}>
+        <div style={{ position: 'relative' }}>
+          <div ref={mapContainerRef} style={styles.map} />
+          {/* Fixed Center Pin */}
+          <div style={styles.centerPin}>
+            <MapPin size={40} color="var(--dark-red)" style={{ marginTop: -40, fill: 'var(--dark-red)', filter: 'drop-shadow(0px 4px 4px rgba(0,0,0,0.3))' }} />
           </div>
         </div>
-      )}
+
+        {/* Hint */}
+        <p style={styles.hint}>📌 Geser peta untuk menetapkan titik lokasi pengiriman</p>
+
+        {/* Selected address display */}
+        {value && (
+          <div style={styles.selectedAddr}>
+            <span style={{ marginRight: 6 }}>📍</span>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span>{value}</span>
+              {currentCoords && (
+                <span style={{ fontSize: 11, color: '#1a73e8', marginTop: 2, fontWeight: 600 }}>
+                  {currentCoords.lat.toFixed(6)}, {currentCoords.lng.toFixed(6)}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 const styles = {
-  container: {
+  wrapper: {
     position: 'relative',
+  },
+  container: {
     borderRadius: 12,
     overflow: 'hidden',
     border: '1.5px solid var(--border)',
+    marginTop: 8,
   },
   searchWrap: {
     display: 'flex',
     gap: 0,
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    right: 10,
-    zIndex: 1000,
+    position: 'relative',
+    zIndex: 10,
   },
   searchInput: {
     flex: 1,
@@ -231,14 +234,15 @@ const styles = {
   resultsDropdown: {
     position: 'absolute',
     top: 48,
-    left: 10,
-    right: 10,
+    left: 0,
+    right: 0,
     zIndex: 1000,
     background: 'white',
     borderRadius: 8,
     boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
-    maxHeight: 200,
+    maxHeight: 220,
     overflowY: 'auto',
+    border: '1px solid var(--border)',
   },
   resultItem: {
     display: 'flex',
