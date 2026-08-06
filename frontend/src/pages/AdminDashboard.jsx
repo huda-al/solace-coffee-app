@@ -686,31 +686,33 @@ export default function AdminDashboard() {
                       onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
                       onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                        <div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <div style={s.incomingName}>{order.id_pelanggan?.nama || 'Pelanggan'}</div>
-                          {order.id_pelanggan?.nomor_telepon && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
-                              <a href={`tel:${order.id_pelanggan.nomor_telepon}`} onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '8px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
-                                <Phone size={14} /> Call
-                              </a>
-                              <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '8px 12px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
-                                <MessageCircle size={14} /> WhatsApp
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
                           <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                             {new Date(order.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                           </span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            {order.id_pelanggan?.nomor_telepon && (
+                              <>
+                                <a href={`tel:${order.id_pelanggan.nomor_telepon}`} onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 10px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
+                                  <Phone size={14} /> Call
+                                </a>
+                                <a href={getWaLink(order.id_pelanggan.nomor_telepon, order._id, order.id_pelanggan.nama)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 10px', color: 'var(--dark-red)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>
+                                  <MessageCircle size={14} /> WhatsApp
+                                </a>
+                              </>
+                            )}
+                          </div>
                           <div style={{ display: 'flex', gap: 6 }}>
-                            <button onClick={(e) => { e.stopPropagation(); copyToClipboard(order.alamat_pengiriman); }} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'transparent', border: '1px solid var(--dark-red)', borderRadius: 4, padding: '2px 6px', fontSize: 10, cursor: 'pointer', color: 'var(--dark-red)', fontWeight: 600 }}>
-                              <Copy size={10} /> Copy
+                            <button onClick={(e) => { e.stopPropagation(); copyToClipboard(order.alamat_pengiriman); }} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'transparent', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 8px', fontSize: 11, cursor: 'pointer', color: 'var(--dark-red)', fontWeight: 600 }}>
+                              <Copy size={12} /> Copy
                             </button>
                             {order.titik_lokasi && order.titik_lokasi.lat && (
-                              <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 4, padding: '2px 6px', fontSize: 10, cursor: 'pointer', color: 'var(--dark-red)', fontWeight: 600 }}>
-                                <MapPin size={10} /> Maps
+                              <a href={`https://www.google.com/maps/search/?api=1&query=${order.titik_lokasi.lat},${order.titik_lokasi.lng}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4, background: 'var(--light-tan)', border: '1px solid var(--dark-red)', borderRadius: 6, padding: '6px 8px', fontSize: 11, cursor: 'pointer', color: 'var(--dark-red)', fontWeight: 600 }}>
+                                <MapPin size={12} /> Maps
                               </a>
                             )}
                           </div>
