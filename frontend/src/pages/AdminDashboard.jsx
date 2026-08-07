@@ -141,6 +141,18 @@ function ProdukManager() {
     }
   };
 
+  const deleteMenu = async (id) => {
+    if (!window.confirm('Apakah Anda yakin ingin menghapus produk ini secara permanen?')) return;
+    try {
+      await axios.delete(`/api/menu/${id}`);
+      toast.success('Produk berhasil dihapus');
+      setShowModal(false);
+      loadMenus();
+    } catch (err) {
+      toast.error('Gagal menghapus produk');
+    }
+  };
+
   const updateStok = async (id, newStok) => {
     try {
       await axios.put(`/api/menu/${id}`, { stok: newStok });
@@ -290,8 +302,13 @@ function ProdukManager() {
               </div>
 
               <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
+                {editingMenu && (
+                  <button type="button" onClick={() => deleteMenu(editingMenu._id)} style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15, background: 'transparent', color: 'var(--dark-red)', border: '2px solid var(--dark-red)', borderRadius: 12, cursor: 'pointer', fontWeight: 700 }}>
+                    Hapus Produk
+                  </button>
+                )}
                 <button type="button" onClick={() => setShowModal(false)} className="btn-outline" style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15 }}>Batal</button>
-                <button type="submit" className="btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15 }}>
+                <button type="submit" className="btn-primary" style={{ flex: 2, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15 }}>
                   {editingMenu ? 'Simpan Perubahan' : 'Tambah Produk'}
                 </button>
               </div>
