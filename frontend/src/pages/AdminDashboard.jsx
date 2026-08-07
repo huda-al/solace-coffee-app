@@ -303,7 +303,7 @@ function ProdukManager() {
 
               <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
                 {editingMenu && (
-                  <button type="button" onClick={() => deleteMenu(editingMenu._id)} style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15, background: 'transparent', color: 'var(--dark-red)', border: '2px solid var(--dark-red)', borderRadius: 12, cursor: 'pointer', fontWeight: 700 }}>
+                  <button type="button" onClick={() => deleteMenu(editingMenu._id)} style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15, background: 'transparent', color: 'var(--dark-red)', border: '2px solid var(--dark-red)', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
                     Hapus Produk
                   </button>
                 )}
