@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X, Phone, MessageCircle, Download, Check } from 'lucide-react';
+import { Package, Clock, Users, DollarSign, LogOut, User, Inbox, Coffee, TrendingUp, Copy, MapPin, Calendar, Plus, Edit3, X, Phone, MessageCircle, Download, Check, Bell } from 'lucide-react';
 import dashboardLogo from '../assets/dashboard.png';
 const STATUS_OPTIONS = [
   { val: 'Menunggu Konfirmasi', label: 'Pending' },
@@ -549,9 +549,10 @@ export default function AdminDashboard() {
         const newPending = newOrdersData.filter(o => o.status_pesanan === 'Menunggu Konfirmasi' && !prevPendingIds.has(o._id));
 
         if (newPending.length > 0) {
-          toast.info(`🔔 Ada ${newPending.length} pesanan baru masuk!`, {
+          toast.info(`Ada ${newPending.length} pesanan baru masuk!`, {
             position: "top-right",
             autoClose: 5000,
+            icon: <Bell color="var(--dark-red)" size={20} fill="currentColor" />
           });
           // Play notification sound
           try {
