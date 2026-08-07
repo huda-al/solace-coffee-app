@@ -97,7 +97,6 @@ export default function LocationPicker({ value, onChange, onCoordinatesChange })
     setSearching(true);
     setShowResults(true);
 
-    // Auto-append Banda Aceh to prioritize local results if not specified
     const q = searchQuery.toLowerCase();
     const finalQuery = (q.includes('aceh') || q.includes('banda')) ? searchQuery : `${searchQuery}, Banda Aceh`;
 
@@ -243,7 +242,7 @@ const styles = {
     top: 48,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    zIndex: 9999,
     background: 'white',
     borderRadius: 8,
     boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
