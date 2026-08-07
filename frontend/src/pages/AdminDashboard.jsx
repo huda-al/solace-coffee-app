@@ -304,12 +304,12 @@ function ProdukManager() {
               <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
                 {editingMenu && (
                   <button type="button" onClick={() => deleteMenu(editingMenu._id)} style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15, background: 'transparent', color: 'var(--dark-red)', border: '2px solid var(--dark-red)', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
-                    Hapus Produk
+                    Hapus
                   </button>
                 )}
                 <button type="button" onClick={() => setShowModal(false)} className="btn-outline" style={{ flex: 1, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15 }}>Batal</button>
                 <button type="submit" className="btn-primary" style={{ flex: 2, textAlign: 'center', justifyContent: 'center', padding: '14px 0', fontSize: 15 }}>
-                  {editingMenu ? 'Simpan Perubahan' : 'Tambah Produk'}
+                  {editingMenu ? 'Simpan' : 'Tambah Produk'}
                 </button>
               </div>
             </form>
