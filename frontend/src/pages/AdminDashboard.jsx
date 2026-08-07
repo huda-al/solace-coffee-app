@@ -182,8 +182,7 @@ function ProdukManager() {
               {items.map(m => (
                 <tr key={m._id} style={s.tr}>
                   <td style={s.td}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      {m.gambar && <img src={m.gambar} alt={m.nama_menu} style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                       <span style={{ fontWeight: 600 }}>{m.nama_menu}</span>
                     </div>
                   </td>
