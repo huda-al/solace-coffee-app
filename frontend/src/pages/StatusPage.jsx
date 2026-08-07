@@ -10,6 +10,8 @@ export default function StatusPage() {
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -238,18 +240,7 @@ export default function StatusPage() {
           <button 
             className="btn-primary fade-in" 
             style={{ padding: '12px 32px' }} 
-            onClick={() => {
-              if (window.confirm('Apakah Anda yakin pesanan telah diterima?')) {
-                axios.put(`/api/orders/${order._id}/complete`)
-                  .then(r => {
-                    setOrder(r.data);
-                  })
-                  .catch(err => {
-                    console.error(err);
-                    alert('Gagal mengkonfirmasi pesanan');
-                  });
-              }
-            }}
+            onClick={() => setShowConfirmModal(true)}
           >
             ✓ Konfirmasi Pesanan Diterima
           </button>
@@ -261,6 +252,60 @@ export default function StatusPage() {
           </button>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)', zIndex: 999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backdropFilter: 'blur(4px)', padding: 20
+        }}>
+          <div className="fade-in" style={{
+            background: '#fdfbf7', border: '2px solid var(--dark-red)',
+            borderRadius: 16, padding: '32px 24px', maxWidth: 400,
+            width: '100%', textAlign: 'center', boxShadow: '0 12px 40px rgba(122, 26, 26, 0.15)'
+          }}>
+            <h3 style={{ fontFamily: "'Fraunces', sans-serif", color: 'var(--dark-red)', fontSize: 24, margin: '0 0 16px' }}>Konfirmasi Pesanan</h3>
+            <p style={{ color: 'var(--text-dark)', fontSize: 15, marginBottom: 28, lineHeight: 1.5 }}>
+              Apakah Anda yakin pesanan <strong>{order._id.substring(0, 10).toUpperCase()}</strong> telah Anda terima dengan baik?
+            </p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+              <button 
+                onClick={() => setShowConfirmModal(false)}
+                disabled={confirming}
+                style={{
+                  padding: '10px 20px', borderRadius: 8, border: '1px solid var(--dark-red)',
+                  background: 'transparent', color: 'var(--dark-red)', fontWeight: 600, cursor: 'pointer', flex: 1
+                }}
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => {
+                  setConfirming(true);
+                  axios.put(`/api/orders/${order._id}/complete`)
+                    .then(r => {
+                      setOrder(r.data);
+                      setShowConfirmModal(false);
+                      setConfirming(false);
+                    })
+                    .catch(err => {
+                      console.error(err);
+                      alert('Gagal mengkonfirmasi pesanan');
+                      setConfirming(false);
+                    });
+                }}
+                disabled={confirming}
+                className="btn-primary"
+                style={{ padding: '10px 20px', borderRadius: 8, flex: 1, border: 'none', cursor: confirming ? 'not-allowed' : 'pointer' }}
+              >
+                {confirming ? 'Memproses...' : 'Ya, Diterima'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
