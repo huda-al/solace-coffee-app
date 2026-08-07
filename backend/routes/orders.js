@@ -86,4 +86,31 @@ router.put('/:id/bukti', protect, upload.single('bukti'), async (req, res) => {
   }
 });
 
+// PUT /api/orders/:id/complete — pelanggan konfirmasi pesanan selesai
+router.put('/:id/complete', protect, async (req, res) => {
+  try {
+    const order = await Pesanan.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Pesanan tidak ditemukan' });
+    
+    // Pastikan milik user yang login
+    if (order.id_pelanggan.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Akses ditolak' });
+    }
+
+    if (order.status_pesanan !== 'Pesanan Sedang Dikirim') {
+      return res.status(400).json({ message: 'Status pesanan tidak valid untuk diselesaikan' });
+    }
+
+    order.status_pesanan = 'Pesanan Telah Selesai';
+    if (order.pengiriman) {
+      order.pengiriman.status_pengiriman = 'Pesanan Telah Selesai';
+    }
+    
+    await order.save();
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

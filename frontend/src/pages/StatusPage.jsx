@@ -234,6 +234,27 @@ export default function StatusPage() {
           {order.status_pesanan}
         </span>
 
+        {currentStep === 2 && (
+          <button 
+            className="btn-primary fade-in" 
+            style={{ padding: '12px 32px' }} 
+            onClick={() => {
+              if (window.confirm('Apakah Anda yakin pesanan telah diterima?')) {
+                axios.put(`/api/orders/${order._id}/complete`)
+                  .then(r => {
+                    setOrder(r.data);
+                  })
+                  .catch(err => {
+                    console.error(err);
+                    alert('Gagal mengkonfirmasi pesanan');
+                  });
+              }
+            }}
+          >
+            ✓ Konfirmasi Pesanan Diterima
+          </button>
+        )}
+
         {currentStep === 3 && (
           <button className="btn-primary fade-in" style={{ padding: '12px 32px' }} onClick={() => navigate('/menu')}>
             ← Kembali ke Menu Utama
