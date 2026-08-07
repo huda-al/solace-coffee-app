@@ -96,9 +96,14 @@ export default function LocationPicker({ value, onChange, onCoordinatesChange })
     if (!searchQuery.trim()) return;
     setSearching(true);
     setShowResults(true);
+
+    // Auto-append Banda Aceh to prioritize local results if not specified
+    const q = searchQuery.toLowerCase();
+    const finalQuery = (q.includes('aceh') || q.includes('banda')) ? searchQuery : `${searchQuery}, Banda Aceh`;
+
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=8&addressdetails=1&countrycodes=id&accept-language=id`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(finalQuery)}&limit=8&addressdetails=1&countrycodes=id&accept-language=id`,
         { headers: { 'Accept-Language': 'id', 'User-Agent': 'SolaceCoffeeApp/1.0' } }
       );
       const data = await res.json();
