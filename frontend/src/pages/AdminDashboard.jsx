@@ -24,7 +24,7 @@ const getWaLink = (phone, orderId, name) => {
   if (!phone) return '#';
   let cleanPhone = phone.replace(/\D/g, '');
   if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
-  const msg = `Halo kak ${name}, ini dari kurir Solace Coffee. Saya sedang membawa pesanan kakak dengan ID ${orderId.substring(0, 8).toUpperCase()}. Mohon konfirmasi patokan alamatnya ya kak...`;
+  const msg = `Halo kak ${name}, ini dari kurir Solace Coffee. Saya ingin mengkonfirmasi pesanan dengan kode ${orderId.substring(0, 8).toUpperCase()}. Mohon konfirmasi patokan alamatnya ya kak...`;
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
 };
 
@@ -216,7 +216,7 @@ function ProdukManager() {
                         style={{ fontWeight: 'bold', width: 44, textAlign: 'center', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 0', outline: 'none' }}
                       />
                       <button onClick={() => handleStokChange(m._id, (localStok[m._id] !== undefined ? localStok[m._id] : m.stok) + 1)} style={s.qtyBtn}>+</button>
-                      
+
                       {localStok[m._id] !== undefined && localStok[m._id] !== m.stok && (
                         <button onClick={() => handleStokSave(m._id)} style={{ background: '#E8F9F0', border: '1px solid #25D366', color: '#128C7E', borderRadius: 6, padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} title="Simpan Stok">
                           <Check size={16} />
