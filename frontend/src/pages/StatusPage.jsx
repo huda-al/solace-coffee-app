@@ -17,10 +17,10 @@ export default function StatusPage() {
     let isMounted = true;
     const fetch = () => {
       axios.get(`/api/orders/${id}`)
-        .then(r => { 
+        .then(r => {
           if (isMounted) {
-            setOrder(r.data); 
-            setLoading(false); 
+            setOrder(r.data);
+            setLoading(false);
           }
         })
         .catch(err => {
@@ -57,14 +57,14 @@ export default function StatusPage() {
           {STEPS.map((step, i) => (
             <div key={step} style={s.stepWrapper}>
               <div style={s.stepTop}>
-                <div 
+                <div
                   className={i === currentStep ? 'step-active' : ''}
                   style={{
-                  ...s.stepCircle,
-                  background: i <= currentStep ? 'var(--dark-red)' : 'var(--light-tan)',
-                  border: i === currentStep ? '3px solid var(--dark-red)' : '2px solid transparent',
-                  outline: i === currentStep ? '3px solid var(--light-tan)' : 'none',
-                }}>
+                    ...s.stepCircle,
+                    background: i <= currentStep ? 'var(--dark-red)' : 'var(--light-tan)',
+                    border: i === currentStep ? '3px solid var(--dark-red)' : '2px solid transparent',
+                    outline: i === currentStep ? '3px solid var(--light-tan)' : 'none',
+                  }}>
                   {i < currentStep ? '✓' : ''}
                 </div>
                 {i < STEPS.length - 1 && (
@@ -108,7 +108,7 @@ export default function StatusPage() {
           {currentStep === 1 && <PartyPopper size={28} color="var(--dark-red)" style={{ flexShrink: 0 }} />}
           {currentStep === 2 && <Bike size={28} color="var(--dark-red)" style={{ flexShrink: 0 }} />}
           {currentStep === 3 && <Coffee size={28} color="var(--dark-red)" style={{ flexShrink: 0 }} />}
-          
+
           <span style={{ fontSize: 14, color: 'var(--dark-red)', fontWeight: 600, lineHeight: 1.5, textAlign: 'left' }}>
             {currentStep === 0 && 'Mohon tunggu, pesanan Anda sedang menunggu konfirmasi admin.'}
             {currentStep === 1 && 'Pesanan sedang disiapkan dan diracik oleh tim Solace Coffee.'}
@@ -146,7 +146,7 @@ export default function StatusPage() {
                 <div key={i} style={{ ...s.detailRow, marginBottom: 12 }}>
                   <div>
                     <div style={{ fontWeight: 600 }}>{d.nama_menu}</div>
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{d.jumlah} x Rp {(d.harga || (d.subtotal/d.jumlah)).toLocaleString('id-ID')}</div>
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{d.jumlah} x Rp {(d.harga || (d.subtotal / d.jumlah)).toLocaleString('id-ID')}</div>
                   </div>
                   <div style={{ fontWeight: 600 }}>Rp {d.subtotal.toLocaleString('id-ID')}</div>
                 </div>
@@ -237,9 +237,9 @@ export default function StatusPage() {
         </span>
 
         {currentStep === 2 && (
-          <button 
-            className="btn-primary fade-in" 
-            style={{ padding: '12px 32px' }} 
+          <button
+            className="btn-primary fade-in"
+            style={{ padding: '12px 32px' }}
             onClick={() => setShowConfirmModal(true)}
           >
             ✓ Konfirmasi Pesanan Diterima
@@ -271,17 +271,17 @@ export default function StatusPage() {
               Apakah Anda yakin pesanan <strong>{order._id.substring(0, 10).toUpperCase()}</strong> telah Anda terima dengan baik?
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <button 
+              <button
                 onClick={() => setShowConfirmModal(false)}
                 disabled={confirming}
                 style={{
                   padding: '10px 20px', borderRadius: 8, border: '1px solid var(--dark-red)',
-                  background: 'transparent', color: 'var(--dark-red)', fontWeight: 600, cursor: 'pointer', flex: 1
+                  background: 'transparent', color: 'var(--dark-red)', fontWeight: 600, cursor: 'pointer', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'
                 }}
               >
                 Batal
               </button>
-              <button 
+              <button
                 onClick={() => {
                   setConfirming(true);
                   axios.put(`/api/orders/${order._id}/complete`)
@@ -298,7 +298,7 @@ export default function StatusPage() {
                 }}
                 disabled={confirming}
                 className="btn-primary"
-                style={{ padding: '10px 20px', borderRadius: 8, flex: 1, border: 'none', cursor: confirming ? 'not-allowed' : 'pointer' }}
+                style={{ padding: '10px 20px', borderRadius: 8, flex: 1, border: 'none', cursor: confirming ? 'not-allowed' : 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
               >
                 {confirming ? 'Memproses...' : 'Ya, Diterima'}
               </button>
