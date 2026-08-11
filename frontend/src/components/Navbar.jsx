@@ -17,7 +17,7 @@ export default function Navbar() {
   const closeMenu = () => setIsMobileMenuOpen(false);
 
   const renderCartBtn = (className) => (
-    <button 
+    <button
       className={`cart-btn ${className}`}
       onClick={() => { navigate('/checkout'); closeMenu(); }}
       style={{
@@ -39,7 +39,7 @@ export default function Navbar() {
         <Link to="/" className="navbar-logo" onClick={closeMenu}>
           <img src={logoImg} alt="Solace Logo" style={{ height: 40, width: 'auto' }} />
         </Link>
-        
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {renderCartBtn('mobile-cart')}
 
@@ -54,8 +54,8 @@ export default function Navbar() {
 
         <ul className={`navbar-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
           <li>
-            <Link 
-              to="/menu" 
+            <Link
+              to="/menu"
               onClick={(e) => {
                 if (location.pathname === '/menu') {
                   e.preventDefault();
@@ -76,7 +76,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link 
+            <Link
               to="/about"
               onClick={closeMenu}
               style={{
@@ -102,7 +102,7 @@ export default function Navbar() {
               )}
               <li>
                 <button className="btn-primary" style={{ padding: '8px 18px', borderRadius: 50, display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => { logout(); navigate('/'); }}>
-                  Logout 
+                  Logout
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                 </button>
               </li>
@@ -111,7 +111,7 @@ export default function Navbar() {
             <li>
               <Link to="/login" style={{ textDecoration: 'none' }} onClick={closeMenu}>
                 <button className="btn-primary" style={{ padding: '8px 20px', borderRadius: 50, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  Login 
+                  Login
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </button>
               </Link>
