@@ -10,7 +10,7 @@ const pelangganSchema = new mongoose.Schema({
   role: { type: String, enum: ['pelanggan', 'admin'], default: 'pelanggan' }
 }, { timestamps: true });
 
-// Hash password before saving
+
 pelangganSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
@@ -18,7 +18,7 @@ pelangganSchema.pre('save', async function (next) {
   next();
 });
 
-// Compare password method
+
 pelangganSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
