@@ -4,7 +4,7 @@ import axios from 'axios';
 import App from './App';
 
 if (process.env.REACT_APP_API_URL) {
-  axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+  axios.defaults.baseURL = process.env.REACT_APP_API_URL.replace(/\/+$/, '');
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

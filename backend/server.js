@@ -10,12 +10,31 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || true,
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Ensure MongoDB connection for Serverless environments (Vercel)
+app.use(async (req, res, next) => {
+  if (mongoose.connection.readyState !== 1 && process.env.MONGODB_URI) {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI);
+      console.log('✅ MongoDB Connected (Serverless)');
+    } catch (err) {
+      console.error('❌ MongoDB Connection Error:', err);
+      return res.status(500).json({ message: 'Database connection error', error: err.message });
+    }
+  }
+  next();
+});
+
+// Root / Health Check
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Solace Coffee API is running successfully!' });
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -23,10 +42,12 @@ app.use('/api/menu', require('./routes/menu'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/admin', require('./routes/admin'));
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ MongoDB Connected: solace_coffee'))
-  .catch(err => console.error('❌ MongoDB Error:', err));
+// MongoDB Connection for local development
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('✅ MongoDB Connected: solace_coffee'))
+    .catch(err => console.error('❌ MongoDB Error:', err));
+}
 
 mongoose.connection.on('error', err => {
   console.error('❌ MongoDB connection error:', err);
@@ -36,9 +57,12 @@ mongoose.connection.on('disconnected', () => {
   console.warn('⚠️ MongoDB disconnected');
 });
 
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-  console.log(`🚀 Solace Coffee API running on port ${PORT}`);
-});
+// Only start listening when executed directly (node server.js), not when imported or in Vercel Serverless
+if (require.main === module && !process.env.VERCEL) {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => {
+    console.log(`🚀 Solace Coffee API running on port ${PORT}`);
+  });
+}
 
 module.exports = app;
