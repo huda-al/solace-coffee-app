@@ -19,13 +19,22 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ensure MongoDB connection for Serverless environments (Vercel)
 app.use(async (req, res, next) => {
-  if (mongoose.connection.readyState !== 1 && process.env.MONGODB_URI) {
+  if (mongoose.connection.readyState !== 1) {
+    if (!process.env.MONGODB_URI) {
+      console.error('❌ MONGODB_URI is not configured in environment variables');
+      return res.status(500).json({ 
+        message: 'MONGODB_URI belum ditambahkan di Environment Variables Vercel' 
+      });
+    }
     try {
       await mongoose.connect(process.env.MONGODB_URI);
       console.log('✅ MongoDB Connected (Serverless)');
     } catch (err) {
       console.error('❌ MongoDB Connection Error:', err);
-      return res.status(500).json({ message: 'Database connection error', error: err.message });
+      return res.status(500).json({ 
+        message: 'Koneksi MongoDB gagal (Cek IP Whitelist 0.0.0.0/0 di Atlas)', 
+        error: err.message 
+      });
     }
   }
   next();

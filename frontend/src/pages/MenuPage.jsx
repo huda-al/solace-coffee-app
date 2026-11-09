@@ -99,11 +99,16 @@ export default function MenuPage() {
           setMenus(res.data);
         } else {
           console.error('API did not return an array:', res.data);
-          toast.error('Gagal memuat menu: Server error');
+          toast.error('Gagal memuat menu: Format response tidak sesuai');
         }
         setLoading(false);
       })
-      .catch(() => { toast.error('Gagal memuat menu'); setLoading(false); });
+      .catch((err) => {
+        console.error('Gagal memuat menu:', err);
+        const errMsg = err.response?.data?.message || err.message || 'Server tidak merespons';
+        toast.error(`Gagal memuat menu: ${errMsg}`);
+        setLoading(false);
+      });
   }, []);
 
   const grouped = CATEGORIES.reduce((acc, cat) => {
