@@ -3,8 +3,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Pelanggan = require('../models/Pelanggan');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'solace_coffee_secret_key_2026';
+const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d';
+
 const generateToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
+  jwt.sign({ id }, JWT_SECRET, { expiresIn: JWT_EXPIRE });
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
